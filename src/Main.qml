@@ -38,6 +38,10 @@ ApplicationWindow {
             } else if (e.modifiers & Qt.ControlModifier && e.key === Qt.Key_C) {
                 backend.copyToClipboard();
                 e.accepted = true;
+            } else if ((e.modifiers & Qt.ControlModifier) && (e.modifiers & Qt.ShiftModifier)
+                       && e.key === Qt.Key_S) {
+                backend.saveAs();
+                e.accepted = true;
             } else if (e.modifiers & Qt.ControlModifier && e.key === Qt.Key_S) {
                 backend.save();
                 e.accepted = true;

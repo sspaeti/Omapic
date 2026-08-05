@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Publish aur/PKGBUILD + aur/.SRCINFO to the AUR. Requires your AUR SSH key
-# registered and the `omapic-git` package to exist on the AUR.
+# registered and the `omapic-bin` package to exist on the AUR.
 set -euo pipefail
 
-PKG=omapic-git
+PKG=omapic-bin
 AUR_URL="ssh://aur@aur.archlinux.org/${PKG}.git"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT

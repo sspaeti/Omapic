@@ -1,10 +1,7 @@
 BINARY  := omapic
 BUILD   := build/$(BINARY)
-PREFIX  := $(HOME)/.local
-DESKTOP := $(HOME)/.local/share/applications
-ICONS   := $(HOME)/.local/share/icons/hicolor/scalable/apps
 
-.PHONY: build test run install uninstall install-pkg clean aur-srcinfo aur-publish release help
+.PHONY: build test run install uninstall clean aur-srcinfo aur-publish release help
 .DEFAULT_GOAL := install
 
 ## build: compile the omapic binary (qmake6 + make)
@@ -19,21 +16,13 @@ test:
 run: build
 	$(BUILD) $(ARGS)
 
-## install: build and install to ~/.local (binary + desktop entry + icon, no root)
-install: build
-	install -Dm755 $(BUILD) $(PREFIX)/bin/$(BINARY)
-	install -Dm644 pkgbuild/omapic.desktop $(DESKTOP)/omapic.desktop
-	install -Dm644 pkgbuild/omapic.svg $(ICONS)/omapic.svg
-	@echo "Installed omapic to $(PREFIX)/bin/$(BINARY)"
-
-## uninstall: remove the ~/.local install
-uninstall:
-	rm -f $(PREFIX)/bin/$(BINARY) $(DESKTOP)/omapic.desktop $(ICONS)/omapic.svg
-	@echo "Removed omapic from $(PREFIX)"
-
-## install-pkg: build and install the system Arch package (makepkg -fsi)
-install-pkg:
+## install: build and install the system Arch package (makepkg -fsi)
+install:
 	./bin/install
+
+## uninstall: remove the installed omapic package
+uninstall:
+	sudo pacman -Rns omapic
 
 ## clean: remove build artifacts
 clean:
