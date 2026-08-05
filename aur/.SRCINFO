@@ -1,5 +1,5 @@
 pkgbase = omapic
-	pkgdesc = Cut horizontal/vertical bands out of images (Snagit-style cut-out) for Wayland/Hyprland
+	pkgdesc = Horizontal & vertical image cut-outs like Snagit for Linux Wayland with Qt 6.
 	pkgver = 0.1.0
 	pkgrel = 1
 	url = https://github.com/sspaeti/Omapic
