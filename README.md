@@ -135,10 +135,13 @@ Create a new release (tags use the form `v0.1.0` — no dot after `v`) - only fo
 
     make release VERSION=v0.1.0
 
-That tags + pushes, waits for GitHub's tag tarball, writes the pkgver + sha256
-into `aur/PKGBUILD`, regenerates `.SRCINFO`, and pushes it to the AUR. The first
-run creates the `omapic` AUR package; later runs update it. (`make aur-bump` /
-`make aur-publish` remain available to run those steps by hand.)
+That tags + pushes, creates the matching **GitHub Release** (via `gh`, with
+auto-generated notes), waits for GitHub's tag tarball, writes the pkgver +
+sha256 into `aur/PKGBUILD`, regenerates `.SRCINFO`, and pushes it to the AUR.
+The first run creates the `omapic` AUR package; later runs update it.
+(`make aur-bump` / `make aur-publish` remain available to run those steps by
+hand; the GitHub Release step needs the [`gh` CLI](https://cli.github.com/)
+authenticated.)
 
 ## Not yet
 

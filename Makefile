@@ -41,7 +41,7 @@ aur-bump:
 aur-publish: aur-srcinfo
 	./scripts/aur-publish.sh
 
-## release: tag+push, bump aur/PKGBUILD, and publish to the AUR in one go (usage: make release VERSION=v0.1.0)
+## release: tag+push, create the GitHub release, bump aur/PKGBUILD, publish to AUR (usage: make release VERSION=v0.1.0)
 release:
 	@test -n "$(VERSION)" || { echo "Usage: make release VERSION=v0.1.0"; exit 1; }
 	@echo "$(VERSION)" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$$' || \
@@ -52,6 +52,13 @@ release:
 	else \
 		git tag -a $(VERSION) -m "Release $(VERSION)"; \
 		git push origin HEAD $(VERSION); \
+	fi
+	@if command -v gh >/dev/null 2>&1; then \
+		gh release view $(VERSION) >/dev/null 2>&1 \
+			&& echo "GitHub release $(VERSION) already exists — skipping." \
+			|| gh release create $(VERSION) --title "$(VERSION)" --generate-notes; \
+	else \
+		echo "gh CLI not found — skipping GitHub Release (tag/tarball still pushed). Install 'github-cli' to enable."; \
 	fi
 	./scripts/aur-bump.sh $(VERSION)
 	git add aur/PKGBUILD aur/.SRCINFO && git commit -m "aur: $(VERSION)" && git push origin HEAD || true
