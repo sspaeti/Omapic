@@ -1,7 +1,7 @@
 BINARY  := omapic
 BUILD   := build/$(BINARY)
 
-.PHONY: build test run install uninstall clean aur-srcinfo aur-publish release help
+.PHONY: build test run install uninstall clean aur-srcinfo aur-bump aur-publish release help
 .DEFAULT_GOAL := install
 
 ## build: compile the omapic binary (qmake6 + make)
@@ -31,6 +31,11 @@ clean:
 ## aur-srcinfo: regenerate aur/.SRCINFO from aur/PKGBUILD
 aur-srcinfo:
 	cd aur && makepkg --printsrcinfo > .SRCINFO
+
+## aur-bump: point aur/PKGBUILD at a released tag + refresh checksum (usage: make aur-bump VERSION=v0.1.0)
+aur-bump:
+	@test -n "$(VERSION)" || { echo "Usage: make aur-bump VERSION=v0.1.0"; exit 1; }
+	./scripts/aur-bump.sh $(VERSION)
 
 ## aur-publish: push aur/PKGBUILD + .SRCINFO to the AUR
 aur-publish: aur-srcinfo

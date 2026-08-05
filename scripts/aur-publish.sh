@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
 # Publish aur/PKGBUILD + aur/.SRCINFO to the AUR. Requires your AUR SSH key
-# registered and the `omapic-bin` package to exist on the AUR.
+# registered at aur.archlinux.org. Works for the first publish too: cloning an
+# unused name yields an empty repo you push to, which creates the package.
 set -euo pipefail
 
-PKG=omapic-bin
+PKG=omapic
 AUR_URL="ssh://aur@aur.archlinux.org/${PKG}.git"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
 if ! git clone "$AUR_URL" "$TMP/$PKG" 2>/dev/null; then
     echo "Clone of $AUR_URL failed."
-    echo "Ensure the AUR package '$PKG' exists and your SSH key is registered at aur.archlinux.org."
+    echo "Register your SSH key at aur.archlinux.org (Account > SSH public key) first."
     exit 1
 fi
 
@@ -21,6 +22,7 @@ if git diff --cached --quiet; then
     echo "No changes to publish."
     exit 0
 fi
-git commit -m "Update ${PKG}"
+PKGVER="$(sed -n 's/^pkgver=//p' PKGBUILD)"
+git commit -m "Update to ${PKGVER}"
 git push
-echo "Pushed ${PKG} to the AUR."
+echo "Pushed ${PKG} ${PKGVER} to the AUR."
