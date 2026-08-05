@@ -16,7 +16,7 @@ license=('MIT')
 depends=('qt6-base' 'qt6-declarative' 'wl-clipboard' 'xdg-desktop-portal')
 makedepends=('qt6-base' 'qt6-declarative')
 source=("${pkgname}-${pkgver}.tar.gz::${url}/archive/refs/tags/v${pkgver}.tar.gz")
-sha256sums=('SKIP')
+sha256sums=('6bfcc83d9f5cc27649717562ca4208632dce1c92ab935405e60aaca511816021')
 
 build() {
     cd "${_repo}-${pkgver}"

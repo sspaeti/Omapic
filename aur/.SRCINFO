@@ -13,6 +13,6 @@ pkgbase = omapic
 	depends = wl-clipboard
 	depends = xdg-desktop-portal
 	source = omapic-0.1.0.tar.gz::https://github.com/sspaeti/Omapic/archive/refs/tags/v0.1.0.tar.gz
-	sha256sums = SKIP
+	sha256sums = 6bfcc83d9f5cc27649717562ca4208632dce1c92ab935405e60aaca511816021
 
 pkgname = omapic
