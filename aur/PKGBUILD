@@ -1,35 +1,41 @@
 # Maintainer: Simon Späti <simon at ssp dot sh>
 
+# Prebuilt-binary AUR package (modeled on the neomd -bin PKGBUILD).
+# The release tarball for each arch must bundle: the `omapic` binary,
+# omapic.desktop, omapic.svg, README.md and LICENSE (produced by the
+# release workflow). Fill sha256sums per release (SKIP = unverified).
+
+_pkgauthor=sspaeti
 _pkgname=omapic
-pkgname=${_pkgname}-git
+pkgname=${_pkgname}-bin
 pkgdesc="Cut horizontal/vertical bands out of images (Snagit-style cut-out) for Wayland/Hyprland"
-pkgver=r1
+
+pkgver=0.1.0
 pkgrel=1
+_pkgvername=v${pkgver}
+
 arch=('x86_64' 'aarch64')
-url="https://github.com/ssp-data/omapic"
+_barch=('linux_amd64' 'linux_arm64')
+
+url="https://github.com/${_pkgauthor}/${_pkgname}"
+
 license=('MIT')
+
 depends=('qt6-base' 'qt6-declarative' 'wl-clipboard' 'xdg-desktop-portal')
-makedepends=('git' 'qt6-base' 'qt6-declarative')
+
 provides=("${_pkgname}")
 conflicts=("${_pkgname}")
-source=("${_pkgname}::git+${url}.git")
-sha256sums=('SKIP')
 
-pkgver() {
-    cd "${_pkgname}"
-    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-}
-
-build() {
-    cd "${_pkgname}"
-    ./bin/build
-}
+source_x86_64=("${_pkgname}-${arch[0]}-${pkgver}.tgz::${url}/releases/download/${_pkgvername}/${_pkgname}_${pkgver}_${_barch[0]}.tar.gz")
+source_aarch64=("${_pkgname}-${arch[1]}-${pkgver}.tgz::${url}/releases/download/${_pkgvername}/${_pkgname}_${pkgver}_${_barch[1]}.tar.gz")
+sha256sums_x86_64=('SKIP')
+sha256sums_aarch64=('SKIP')
 
 package() {
-    cd "${_pkgname}"
-    install -Dm755 build/omapic "${pkgdir}/usr/bin/omapic"
-    install -Dm644 pkgbuild/omapic.desktop "${pkgdir}/usr/share/applications/omapic.desktop"
-    install -Dm644 pkgbuild/omapic.svg "${pkgdir}/usr/share/icons/hicolor/scalable/apps/omapic.svg"
-    install -Dm644 README.md "${pkgdir}/usr/share/doc/${pkgname}/README.md"
-    install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+    cd "${srcdir}/" || exit
+    install -Dm755 "${_pkgname}" "${pkgdir}/usr/bin/${_pkgname}"
+    install -Dm644 "omapic.desktop" "${pkgdir}/usr/share/applications/${_pkgname}.desktop"
+    install -Dm644 "omapic.svg" "${pkgdir}/usr/share/icons/hicolor/scalable/apps/${_pkgname}.svg"
+    install -Dm644 "README.md" "${pkgdir}/usr/share/doc/${pkgname}/README.md"
+    install -Dm644 "LICENSE" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }

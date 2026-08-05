@@ -46,6 +46,7 @@ public:
     Q_INVOKABLE void undo();
     Q_INVOKABLE void copyToClipboard();
     Q_INVOKABLE QString save();
+    Q_INVOKABLE void saveAs();
     Q_INVOKABLE void openDialog();
 
 signals:

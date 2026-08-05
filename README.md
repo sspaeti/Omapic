@@ -1,8 +1,8 @@
 # omapic
 
-A dead-simple image **cut-out** tool for Hyprland/Arch. Open an image, drag a
+A simple image **cut-out** tool for Hyprland/Arch. Open an image, drag a
 horizontal or vertical band out of the middle, watch the gap collapse live,
-press Enter. Snagit's "cut out", ported to Linux.
+press Enter. Snagit's ["cut out"](https://www.techsmith.com/learn/tutorials/snagit/cut-out/), ported to Linux.
 
 Built like [omacut](https://github.com/omacom-io/omacut): Qt Quick (QML) UI +
 a C++ backend compiled to a single binary. Cuts use Qt's `QImage` — no ffmpeg,
@@ -14,6 +14,7 @@ no ImageMagick at runtime.
 - **Ctrl+Z** — undo
 - **Ctrl+C** — copy result to clipboard
 - **Ctrl+S** — save to `~/Pictures/Printscreen/<YYYY-MM>/`
+- **Ctrl+Shift+S** — save as… (native file dialog)
 - **Ctrl+O** — open a file
 - **Esc** — clear the current band
 
@@ -35,8 +36,8 @@ Requires: `qt6-base`, `qt6-declarative`, `wl-clipboard`, `xdg-desktop-portal`.
 
 A root `Makefile` wraps the common workflows (run `make help` for the full list):
 
-    make install               # build + install to ~/.local (binary, desktop entry, icon — no root)
-    make install-pkg           # build + install the system Arch package (makepkg -fsi)
+    make install               # build + install the system Arch package (makepkg -fsi)
+    make uninstall             # remove the installed package
     make run ARGS=image.png    # build then run on the given image
     make test                  # run backend unit tests
     make release VERSION=v0.1.0  # tag + push a release
@@ -45,15 +46,25 @@ A root `Makefile` wraps the common workflows (run `make help` for the full list)
 
 ## AUR
 
-The AUR package is **`omapic-git`** (a VCS package that builds from source).
-`aur/PKGBUILD` and `aur/.SRCINFO` are published with `make aur-publish`
-(requires your AUR SSH key registered and the package to already exist on the AUR).
+The AUR package is **`omapic-bin`** (a prebuilt-binary package, modeled on the
+`neomd-bin` PKGBUILD). `aur/PKGBUILD` pulls per-arch release tarballs from
+GitHub releases; each tarball must bundle the `omapic` binary plus
+`omapic.desktop`, `omapic.svg`, `README.md` and `LICENSE`. Publish with
+`make aur-publish` (requires your AUR SSH key registered and the package to
+already exist on the AUR).
 
-> **Note:** The GitHub URL `github.com/ssp-data/omapic` and the AUR package name
-> `omapic-git` are assumptions — the maintainer should confirm/adjust these before
-> publishing.
+> **Note:** The GitHub URL `github.com/sspaeti/omapic` is an assumption — confirm
+> it and fill the per-release `sha256sums` in `aur/PKGBUILD` before publishing.
 
 ## Not yet
 - Multiple simultaneous cut lines (one at a time for now)
 - Re-draggable band edge handles after the initial drag
 - A custom app icon (currently reuses omacut's)
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for what's new.
+
+## Roadmap
+
+See at my second brain at [Roadmap](https://www.ssp.sh/brain/omapic#roadmap).

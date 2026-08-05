@@ -110,6 +110,19 @@ void PortalFilePicker::openImage() {
     requestFile(QStringLiteral("OpenFile"), QStringLiteral("Open Image File"), options, Action::Open);
 }
 
+void PortalFilePicker::saveImage(const QString &suggestedName) {
+    QVariantMap options;
+    options.insert(QStringLiteral("accept_label"), QStringLiteral("Save"));
+    options.insert(QStringLiteral("modal"), true);
+    options.insert(QStringLiteral("current_folder"), portalPathBytes(QDir::homePath()));
+    options.insert(QStringLiteral("current_name"),
+                   suggestedName.isEmpty() ? QStringLiteral("omapic.png") : suggestedName);
+    options.insert(QStringLiteral("filters"), QVariant::fromValue(imageFilters()));
+    options.insert(QStringLiteral("current_filter"), QVariant::fromValue(imageFilter()));
+
+    requestFile(QStringLiteral("SaveFile"), QStringLiteral("Save Image As"), options, Action::Save);
+}
+
 bool PortalFilePicker::connectToRequestPath(const QString &path) {
     m_pendingPath = path;
     return QDBusConnection::sessionBus().connect(
@@ -199,6 +212,8 @@ void PortalFilePicker::handleResponse(uint response, const QVariantMap &results)
     const QUrl url(uris.first());
     if (action == Action::Open)
         emit openSelected(url);
+    else if (action == Action::Save)
+        emit saveSelected(url);
 }
 
 void PortalFilePicker::clearPending() {

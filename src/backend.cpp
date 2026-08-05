@@ -6,6 +6,7 @@
 #include <QDate>
 #include <QDateTime>
 #include <QDir>
+#include <QFileInfo>
 #include <QProcess>
 
 Backend::Backend(QObject *parent) : QObject(parent) {}
@@ -14,6 +15,20 @@ Backend::Backend(ImageProvider *provider, FilePicker *picker, QObject *parent)
     if (m_picker) {
         connect(m_picker, &FilePicker::openSelected, this,
                 [this](const QUrl &url) { load(url); });
+        connect(m_picker, &FilePicker::saveSelected, this,
+                [this](const QUrl &url) {
+                    if (m_image.isNull())
+                        return;
+                    QString path = url.isLocalFile() ? url.toLocalFile() : url.toString();
+                    // Default to PNG if the user typed a name without an extension.
+                    if (!path.contains(QLatin1Char('.')) ||
+                        path.endsWith(QLatin1Char('.')))
+                        path += QStringLiteral("png");
+                    if (m_image.save(path))
+                        setStatus(QStringLiteral("Saved %1").arg(path));
+                    else
+                        setStatus(QStringLiteral("Save failed: %1").arg(path));
+                });
         connect(m_picker, &FilePicker::failed, this,
                 [this](const QString &m) { setStatus(m); });
     }
@@ -171,6 +186,17 @@ QString Backend::save() {
     }
     setStatus(QStringLiteral("Saved %1").arg(path));
     return path;
+}
+
+void Backend::saveAs() {
+    if (m_image.isNull() || !m_picker)
+        return;
+    QString suggested = QStringLiteral("omapic.png");
+    if (m_source.isLocalFile()) {
+        const QFileInfo fi(m_source.toLocalFile());
+        suggested = fi.completeBaseName() + QStringLiteral("-cut.png");
+    }
+    m_picker->saveImage(suggested);
 }
 
 void Backend::openDialog() {

@@ -43,47 +43,59 @@ Item {
         sourceSize: Qt.size(root.imgW, root.imgH)
     }
 
-    // ---- live collapse preview: two clipped views that slide together ----
-    // Horizontal band: top view = rows [0,bStart), bottom view = rows [bEnd,imgH)
-    // drawn immediately below, so the band's rows vanish in real time.
+    // ---- live collapse preview: two clip-windows onto the full-size image
+    // that slide together. Each window is an Item{clip:true} holding a full
+    // display-size Image offset inside it, so only the wanted rows/cols show.
+    // (Avoids Image.sourceClipRect, which is unreliable on some Qt builds and
+    // was rendering the whole image stretched instead of the cut region.) ----
     Item {
+        // Horizontal band: rows [0,bStart) on top, rows [bEnd,imgH) pulled up.
         anchors.fill: parent
         visible: root.active && root.orientation === 1
-        Image {
-            id: hTop
-            source: root.src; cache: false; fillMode: Image.Stretch
+        Item {
             x: 0; y: 0
             width: root.width; height: root.bStart * root.sy
-            sourceSize: Qt.size(root.imgW, root.imgH)
-            sourceClipRect: Qt.rect(0, 0, root.imgW, root.bStart)
+            clip: true
+            Image {
+                source: root.src; cache: false; fillMode: Image.Stretch
+                x: 0; y: 0; width: root.width; height: root.height
+                sourceSize: Qt.size(root.imgW, root.imgH)
+            }
         }
-        Image {
-            id: hBot
-            source: root.src; cache: false; fillMode: Image.Stretch
+        Item {
             x: 0; y: root.bStart * root.sy
             width: root.width; height: (root.imgH - root.bEnd) * root.sy
-            sourceSize: Qt.size(root.imgW, root.imgH)
-            sourceClipRect: Qt.rect(0, root.bEnd, root.imgW, root.imgH - root.bEnd)
+            clip: true
+            Image {
+                source: root.src; cache: false; fillMode: Image.Stretch
+                x: 0; y: -root.bEnd * root.sy; width: root.width; height: root.height
+                sourceSize: Qt.size(root.imgW, root.imgH)
+            }
         }
     }
     Item {
+        // Vertical band: cols [0,bStart) on the left, cols [bEnd,imgW) pulled left.
         anchors.fill: parent
         visible: root.active && root.orientation === 2
-        Image {
-            id: vLeft
-            source: root.src; cache: false; fillMode: Image.Stretch
+        Item {
             x: 0; y: 0
             width: root.bStart * root.sx; height: root.height
-            sourceSize: Qt.size(root.imgW, root.imgH)
-            sourceClipRect: Qt.rect(0, 0, root.bStart, root.imgH)
+            clip: true
+            Image {
+                source: root.src; cache: false; fillMode: Image.Stretch
+                x: 0; y: 0; width: root.width; height: root.height
+                sourceSize: Qt.size(root.imgW, root.imgH)
+            }
         }
-        Image {
-            id: vRight
-            source: root.src; cache: false; fillMode: Image.Stretch
+        Item {
             x: root.bStart * root.sx; y: 0
             width: (root.imgW - root.bEnd) * root.sx; height: root.height
-            sourceSize: Qt.size(root.imgW, root.imgH)
-            sourceClipRect: Qt.rect(root.bEnd, 0, root.imgW - root.bEnd, root.imgH)
+            clip: true
+            Image {
+                source: root.src; cache: false; fillMode: Image.Stretch
+                x: -root.bEnd * root.sx; y: 0; width: root.width; height: root.height
+                sourceSize: Qt.size(root.imgW, root.imgH)
+            }
         }
     }
 
