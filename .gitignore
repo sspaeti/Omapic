@@ -3,5 +3,7 @@ build/
 moc_*
 qrc_*
 .qmake.stash
-pkg
-pkgbuild
+# makepkg build artifacts (keep the tracked pkgbuild/ source files)
+pkgbuild/pkg/
+pkgbuild/src/
+*.pkg.tar.*

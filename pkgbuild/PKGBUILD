@@ -9,6 +9,7 @@ url='https://github.com/sspaeti/omapic'
 license=('MIT')
 install='omapic.install'
 depends=('qt6-base' 'qt6-declarative' 'wl-clipboard' 'xdg-desktop-portal')
+optdepends=('xdg-desktop-portal-gtk: file open/save dialogs (or -kde / -gnome)')
 makedepends=('qt6-base' 'qt6-declarative')
 source=()
 sha256sums=()

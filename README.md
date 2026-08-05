@@ -1,6 +1,6 @@
 # omapic
 
-A minimal image **cut-out** tool for Wayland/Hyprland/Arch. Open an image, drag a
+A minimal image **cut-out** tool for **Linux Wayland**. Open an image, drag a
 horizontal or vertical band out of the middle, watch the gap collapse live,
 press Enter. Snagit's ["cut out"](https://www.techsmith.com/learn/tutorials/snagit/cut-out/), ported to Linux.
 
@@ -43,7 +43,9 @@ Cutting image by importing a long image - see before and after:
     ./bin/test             # run unit tests
     ./bin/install          # build + install the Arch package
 
-Requires: `qt6-base`, `qt6-declarative`, `wl-clipboard`, `xdg-desktop-portal`.
+Requires: `qt6-base`, `qt6-declarative`, `wl-clipboard`, `xdg-desktop-portal`
+(+ a FileChooser portal backend such as `xdg-desktop-portal-gtk` for the file
+dialogs — see [Requirements](#requirements)).
 
 ## Makefile
 
@@ -60,11 +62,23 @@ A root `Makefile` wraps the common workflows (run `make help` for the full list)
 
 ## Install
 
-omapic is a Qt 6 Wayland app, so it runs on **any** Wayland compositor
-(Hyprland, Sway, GNOME, KDE, …) — Arch is only needed for the AUR package, not
-to run it. At runtime you need `wl-clipboard` and `xdg-desktop-portal` (with a
-portal backend, e.g. `xdg-desktop-portal-hyprland`/`-gtk`/`-kde`) for the
-clipboard and file dialogs.
+### Requirements
+
+omapic is a **Qt 6 app for Wayland** — it runs on any Wayland session
+(Hyprland, Sway, GNOME, KDE, …). Arch only matters for the AUR package; any
+distro can build from source. What each feature needs:
+
+- **Display:** a Wayland session. It is not built for X11 (the clipboard and
+  file-dialog features are Wayland-only).
+- **Clipboard** (`Ctrl+C`, `--clipboard`): `wl-clipboard` (`wl-copy` / `wl-paste`).
+- **File dialogs** (`Ctrl+O`, `Ctrl+Shift+S`): `xdg-desktop-portal` **plus a
+  backend that implements the FileChooser portal** — `xdg-desktop-portal-gtk`,
+  `-kde`, or `-gnome`. Note: on wlroots compositors (Hyprland, Sway) the
+  compositor's own portal (`xdg-desktop-portal-hyprland` / `-wlr`) only handles
+  screenshots/screencast — **not** file dialogs — so install
+  `xdg-desktop-portal-gtk` for those.
+- **The cut itself** and **`Ctrl+S`** (save to `~/Pictures/Printscreen/…`) need
+  none of the above; they work as long as the app runs.
 
 ### AUR (Arch & derivatives)
 
@@ -86,12 +100,12 @@ Install the build + runtime dependencies, then build with `qmake6`.
 
       sudo apt install build-essential qmake6 qt6-base-dev qt6-declarative-dev \
           qml6-module-qtquick-controls qml6-module-qtquick-templates \
-          wl-clipboard xdg-desktop-portal
+          wl-clipboard xdg-desktop-portal xdg-desktop-portal-gtk
 
 - **Fedora:**
 
       sudo dnf install gcc-c++ make qt6-qtbase-devel qt6-qtdeclarative-devel \
-          wl-clipboard xdg-desktop-portal
+          wl-clipboard xdg-desktop-portal xdg-desktop-portal-gtk
 
 (Exact QML-module package names vary by distro; you need Qt 6 Base, Qt
 Declarative/Qt Quick, and Qt Quick Controls.)
