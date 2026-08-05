@@ -54,30 +54,31 @@ A root `Makefile` wraps the common workflows (run `make help` for the full list)
     make uninstall               # remove the installed package
     make run ARGS=image.png      # build then run on the given image
     make test                    # run backend unit tests
-    make release VERSION=v0.1.0  # tag + push a release
-    make aur-bump VERSION=v0.1.0 # point aur/PKGBUILD at the tag + refresh checksum
-    make aur-publish             # push aur/PKGBUILD + .SRCINFO to the AUR
+    make release VERSION=v0.1.0  # tag+push, bump aur/PKGBUILD, publish to the AUR (all in one)
+    make aur-bump VERSION=v0.1.0 # (manual) point aur/PKGBUILD at a tag + refresh checksum
+    make aur-publish             # (manual) push aur/PKGBUILD + .SRCINFO to the AUR
     make help                    # list all targets
 
 ## AUR
 
 The AUR package is **`omapic`** — a *source* package: `makepkg` builds it from
 the GitHub tag tarball on the user's machine (qt6 `makedepends`). No CI,
-no prebuilt binaries.
+no prebuilt binaries, no GitHub Action — the AUR push happens locally from
+`make release`.
 
 **One-time setup**
-1. Register your SSH public key at aur.archlinux.org (Account → My Account).
+1. Register your SSH public key at aur.archlinux.org (Account → My Account →
+   SSH Public Key). This is required for the AUR push, and can't be skipped.
 2. The GitHub repo (`github.com/sspaeti/Omapic`) exists with `origin` set.
 
-**Each release** (tags use the form `v0.1.0` — note: no dot after `v`):
+**Cut a release — one command** (tags use the form `v0.1.0`; no dot after `v`):
 
-    make release VERSION=v0.1.0    # git tag + push; GitHub then serves the source tarball for the tag
-    make aur-bump VERSION=v0.1.0   # set pkgver + sha256 in aur/PKGBUILD, regen .SRCINFO
-    git add aur/ && git commit -m "aur: v0.1.0" && git push   # keep the repo copy in sync (optional)
-    make aur-publish               # clone the AUR repo, copy PKGBUILD + .SRCINFO, commit, push
+    make release VERSION=v0.1.0
 
-The first `make aur-publish` creates the `omapic` package on the AUR (pushing to
-the empty repo). Subsequent runs just update it.
+That tags + pushes, waits for GitHub's tag tarball, writes the pkgver + sha256
+into `aur/PKGBUILD`, regenerates `.SRCINFO`, and pushes it to the AUR. The first
+run creates the `omapic` AUR package; later runs update it. (`make aur-bump` /
+`make aur-publish` remain available to run those steps by hand.)
 
 ## Not yet
 - Multiple simultaneous cut lines (one at a time for now)

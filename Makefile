@@ -41,12 +41,17 @@ aur-bump:
 aur-publish: aur-srcinfo
 	./scripts/aur-publish.sh
 
-## release: tag and push a new version (usage: make release VERSION=v0.1.0)
+## release: tag+push, bump aur/PKGBUILD, and publish to the AUR in one go (usage: make release VERSION=v0.1.0)
 release:
 	@test -n "$(VERSION)" || { echo "Usage: make release VERSION=v0.1.0"; exit 1; }
+	@echo "$(VERSION)" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$$' || \
+		{ echo "Bad version '$(VERSION)'. Use vMAJOR.MINOR.PATCH, e.g. v0.1.0 (no dot after v)."; exit 1; }
 	git tag -a $(VERSION) -m "Release $(VERSION)"
-	git push origin $(VERSION)
-	@echo "Tagged $(VERSION)."
+	git push origin HEAD $(VERSION)
+	./scripts/aur-bump.sh $(VERSION)
+	git add aur/PKGBUILD aur/.SRCINFO && git commit -m "aur: $(VERSION)" && git push origin HEAD || true
+	./scripts/aur-publish.sh
+	@echo "Released $(VERSION) and published to the AUR."
 
 ## help: print this list
 help:
