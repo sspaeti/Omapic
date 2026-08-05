@@ -7,7 +7,7 @@
 _pkgauthor=sspaeti
 _repo=Omapic                 # GitHub repo name (case-sensitive tarball dir)
 pkgname=omapic
-pkgver=0.1.0
+pkgver=0.1.1
 pkgrel=1
 pkgdesc="Horizontal & vertical image cut-outs like Snagit for Linux Wayland with Qt 6."
 arch=('x86_64' 'aarch64')
@@ -17,7 +17,7 @@ depends=('qt6-base' 'qt6-declarative' 'wl-clipboard' 'xdg-desktop-portal')
 optdepends=('xdg-desktop-portal-gtk: file open/save dialogs (or -kde / -gnome)')
 makedepends=('qt6-base' 'qt6-declarative')
 source=("${pkgname}-${pkgver}.tar.gz::${url}/archive/refs/tags/v${pkgver}.tar.gz")
-sha256sums=('6bfcc83d9f5cc27649717562ca4208632dce1c92ab935405e60aaca511816021')
+sha256sums=('ff56b23472e4f2b90bbaf0fe8b7553efb1e294fcd828c69390b99cbd813ad99c')
 
 build() {
     cd "${_repo}-${pkgver}"
