@@ -46,8 +46,13 @@ release:
 	@test -n "$(VERSION)" || { echo "Usage: make release VERSION=v0.1.0"; exit 1; }
 	@echo "$(VERSION)" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$$' || \
 		{ echo "Bad version '$(VERSION)'. Use vMAJOR.MINOR.PATCH, e.g. v0.1.0 (no dot after v)."; exit 1; }
-	git tag -a $(VERSION) -m "Release $(VERSION)"
-	git push origin HEAD $(VERSION)
+	@if git rev-parse -q --verify "refs/tags/$(VERSION)" >/dev/null; then \
+		echo "Tag $(VERSION) already exists — skipping tag/push, continuing to AUR."; \
+		git push origin $(VERSION) || true; \
+	else \
+		git tag -a $(VERSION) -m "Release $(VERSION)"; \
+		git push origin HEAD $(VERSION); \
+	fi
 	./scripts/aur-bump.sh $(VERSION)
 	git add aur/PKGBUILD aur/.SRCINFO && git commit -m "aur: $(VERSION)" && git push origin HEAD || true
 	./scripts/aur-publish.sh
