@@ -74,6 +74,26 @@ private slots:
         QCOMPARE(qRed(out.pixel(0, 0)), 2); // top two rows removed
     }
 
+    void repeatedCutsComposeCorrectly() {
+        // Cut rows [1,2) from a 4x6 image, then cut a column band from the
+        // result. Dimensions and surviving pixels must compose predictably.
+        QImage once = Backend::cut(stripes(4, 6), Backend::Horizontal, 1, 2);
+        QCOMPARE(once.width(), 4);
+        QCOMPARE(once.height(), 5);
+        // Rows now source from 0,2,3,4,5 (row 1 removed).
+        const int expectedRowSource[5] = {0, 2, 3, 4, 5};
+        for (int y = 0; y < 5; ++y)
+            QCOMPARE(qRed(once.pixel(0, y)), expectedRowSource[y]);
+
+        // Second cut on the result: remove a column band. Height is preserved,
+        // width shrinks, and the rows carried over from the first cut are intact.
+        QImage twice = Backend::cut(once, Backend::Vertical, 1, 3);
+        QCOMPARE(twice.width(), 2);
+        QCOMPARE(twice.height(), 5);
+        for (int y = 0; y < 5; ++y)
+            QCOMPARE(qRed(twice.pixel(0, y)), expectedRowSource[y]);
+    }
+
     void saveWritesTimestampedPngInMonthlyFolder() {
         QTemporaryDir dir;
         QVERIFY(dir.isValid());
