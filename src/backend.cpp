@@ -1,4 +1,5 @@
 #include "backend.h"
+#include "filepicker.h"
 #include "imageprovider.h"
 
 #include <QBuffer>
@@ -9,7 +10,14 @@
 
 Backend::Backend(QObject *parent) : QObject(parent) {}
 Backend::Backend(ImageProvider *provider, FilePicker *picker, QObject *parent)
-    : QObject(parent), m_provider(provider), m_picker(picker) {}
+    : QObject(parent), m_provider(provider), m_picker(picker) {
+    if (m_picker) {
+        connect(m_picker, &FilePicker::openSelected, this,
+                [this](const QUrl &url) { load(url); });
+        connect(m_picker, &FilePicker::failed, this,
+                [this](const QString &m) { setStatus(m); });
+    }
+}
 
 QImage Backend::cut(const QImage &src, Orientation o, int start, int end) {
     if (src.isNull())
@@ -165,4 +173,7 @@ QString Backend::save() {
     return path;
 }
 
-void Backend::openDialog() {}
+void Backend::openDialog() {
+    if (m_picker)
+        m_picker->openImage();
+}

@@ -5,5 +5,5 @@ TEMPLATE = app
 
 INCLUDEPATH += ../src
 
-HEADERS += ../src/backend.h
-SOURCES += backend_tests.cpp ../src/backend.cpp
+HEADERS += ../src/backend.h ../src/filepicker.h
+SOURCES += backend_tests.cpp ../src/backend.cpp ../src/imageprovider.cpp
