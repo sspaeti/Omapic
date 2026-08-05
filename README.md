@@ -9,13 +9,17 @@ a C++ backend compiled to a single binary. Cuts use Qt's `QImage` — no ffmpeg,
 no ImageMagick at runtime.
 
 
-## Screenshots
+## Video
+Short video above cut in action:
+![omapic video](images/omapic-vertical-cut.gif) 
 
-|                     Image Selection                      |                     Editing                      |
-| :--------------------------------------------------: | :------------------------------------------------------: |
-| ![omapic image selection]() | ![omapic editing]() |
-|                     Filters                      |                     Saving                      |
-| ![edit filters]() | ![omapic saving]() |
+### Screenshots
+
+Cutting image by importing a long image - see before and after:
+|                     Image cut                      |
+| :--------------------------------------------------: |
+| ![omapic image](images/omapic-before.png) |
+| ![omapic image](images/omapic-after.png) |
 
 
 ## Keys
