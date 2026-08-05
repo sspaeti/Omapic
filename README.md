@@ -25,7 +25,7 @@ Cutting a long image — before and after:
 
 ### Requirements
 
-omapic is a **Qt 6 app for Wayland** — it runs on any Wayland session
+omapic is a **Qt 6 app for Wayland**. It runs on any Wayland session
 (Hyprland, Sway, GNOME, KDE, …). Arch only matters for the AUR package; any
 distro can build from source. What each feature needs:
 
@@ -95,14 +95,14 @@ Open an image from a file or the clipboard:
 
 ### Keys
 
-- **drag** — create a band (drag direction picks horizontal vs vertical)
-- **Enter** — apply the cut
-- **Ctrl+Z** — undo
-- **Ctrl+C** — copy result to clipboard
-- **Ctrl+S** — save to `~/Pictures/Printscreen/<YYYY-MM>/`
-- **Ctrl+Shift+S** — save as… (native file dialog)
-- **Ctrl+O** — open a file
-- **Esc** — clear the current band
+- **drag**: create a band (drag direction picks horizontal vs vertical)
+- **Enter**: apply the cut
+- **Ctrl+Z**: undo
+- **Ctrl+C**: copy result to clipboard
+- **Ctrl+S**: save to `~/Pictures/Printscreen/<YYYY-MM>/`
+- **Ctrl+Shift+S**: save as… (native file dialog)
+- **Ctrl+O**: open a file
+- **Esc**: clear the current band
 
 ### Hyprland keybind
 
@@ -131,7 +131,7 @@ A root `Makefile` wraps the common workflows (`make help` for all):
 
 ### Cut a release
 
-One command (tags use the form `v0.1.0` — no dot after `v`):
+Create a new release (tags use the form `v0.1.0` — no dot after `v`) - only for me:
 
     make release VERSION=v0.1.0
 
