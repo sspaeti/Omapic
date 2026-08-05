@@ -59,18 +59,60 @@ A root `Makefile` wraps the common workflows (run `make help` for the full list)
     make aur-publish             # (manual) push aur/PKGBUILD + .SRCINFO to the AUR
     make help                    # list all targets
 
-## AUR
+## Install
 
-The AUR package is **`omapic`** — a *source* package: `makepkg` builds it from
-the GitHub tag tarball on the user's machine (qt6 `makedepends`). No CI,
-no prebuilt binaries, no GitHub Action — the AUR push happens locally from
-`make release`.
+omapic is a Qt 6 Wayland app, so it runs on **any** Wayland compositor
+(Hyprland, Sway, GNOME, KDE, …) — Arch is only needed for the AUR package, not
+to run it. At runtime you need `wl-clipboard` and `xdg-desktop-portal` (with a
+portal backend, e.g. `xdg-desktop-portal-hyprland`/`-gtk`/`-kde`) for the
+clipboard and file dialogs.
 
-**One-time setup**
-1. Register your SSH public key at aur.archlinux.org (Account → My Account →
-   SSH Public Key). This is required for the AUR push, and can't be skipped.
-2. The GitHub repo (`github.com/sspaeti/Omapic`) exists with `origin` set.
+### AUR (Arch & derivatives)
 
+With an AUR helper:
+
+    yay -S omapic        # or: paru -S omapic
+
+Or manually:
+
+    git clone https://aur.archlinux.org/omapic.git
+    cd omapic
+    makepkg -si
+
+### Other Linux (build from source)
+
+Install the build + runtime dependencies, then build with `qmake6`.
+
+- **Debian / Ubuntu:**
+
+      sudo apt install build-essential qmake6 qt6-base-dev qt6-declarative-dev \
+          qml6-module-qtquick-controls qml6-module-qtquick-templates \
+          wl-clipboard xdg-desktop-portal
+
+- **Fedora:**
+
+      sudo dnf install gcc-c++ make qt6-qtbase-devel qt6-qtdeclarative-devel \
+          wl-clipboard xdg-desktop-portal
+
+(Exact QML-module package names vary by distro; you need Qt 6 Base, Qt
+Declarative/Qt Quick, and Qt Quick Controls.)
+
+Then build and run:
+
+    git clone https://github.com/sspaeti/Omapic.git
+    cd Omapic
+    ./bin/build              # -> build/omapic
+    ./build/omapic image.png
+
+Install into your user prefix (no root; `make install` is Arch-only):
+
+    install -Dm755 build/omapic ~/.local/bin/omapic
+    install -Dm644 pkgbuild/omapic.desktop ~/.local/share/applications/omapic.desktop
+    install -Dm644 pkgbuild/omapic.svg ~/.local/share/icons/hicolor/scalable/apps/omapic.svg
+
+Make sure `~/.local/bin` is on your `PATH`.
+
+## Create release
 **Cut a release — one command** (tags use the form `v0.1.0`; no dot after `v`):
 
     make release VERSION=v0.1.0
@@ -81,8 +123,6 @@ run creates the `omapic` AUR package; later runs update it. (`make aur-bump` /
 `make aur-publish` remain available to run those steps by hand.)
 
 ## Not yet
-- Multiple simultaneous cut lines (one at a time for now)
-- Re-draggable band edge handles after the initial drag
 - A custom app icon (currently reuses omacut's)
 
 ## Roadmap
