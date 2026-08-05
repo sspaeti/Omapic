@@ -1,0 +1,35 @@
+# Maintainer: Simon Späti <simon at ssp dot sh>
+
+_pkgname=omapic
+pkgname=${_pkgname}-git
+pkgdesc="Cut horizontal/vertical bands out of images (Snagit-style cut-out) for Wayland/Hyprland"
+pkgver=r1
+pkgrel=1
+arch=('x86_64' 'aarch64')
+url="https://github.com/ssp-data/omapic"
+license=('MIT')
+depends=('qt6-base' 'qt6-declarative' 'wl-clipboard' 'xdg-desktop-portal')
+makedepends=('git' 'qt6-base' 'qt6-declarative')
+provides=("${_pkgname}")
+conflicts=("${_pkgname}")
+source=("${_pkgname}::git+${url}.git")
+sha256sums=('SKIP')
+
+pkgver() {
+    cd "${_pkgname}"
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+    cd "${_pkgname}"
+    ./bin/build
+}
+
+package() {
+    cd "${_pkgname}"
+    install -Dm755 build/omapic "${pkgdir}/usr/bin/omapic"
+    install -Dm644 pkgbuild/omapic.desktop "${pkgdir}/usr/share/applications/omapic.desktop"
+    install -Dm644 pkgbuild/omapic.svg "${pkgdir}/usr/share/icons/hicolor/scalable/apps/omapic.svg"
+    install -Dm644 README.md "${pkgdir}/usr/share/doc/${pkgname}/README.md"
+    install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}
