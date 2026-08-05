@@ -1,13 +1,12 @@
 # omapic
 
-A simple image **cut-out** tool for Hyprland/Arch. Open an image, drag a
+A minimal image **cut-out** tool for Wayland/Hyprland/Arch. Open an image, drag a
 horizontal or vertical band out of the middle, watch the gap collapse live,
 press Enter. Snagit's ["cut out"](https://www.techsmith.com/learn/tutorials/snagit/cut-out/), ported to Linux.
 
 Built like [omacut](https://github.com/omacom-io/omacut): Qt Quick (QML) UI +
 a C++ backend compiled to a single binary. Cuts use Qt's `QImage` — no ffmpeg,
 no ImageMagick at runtime.
-
 
 ## Video
 Short video above cut in action:
