@@ -57,3 +57,11 @@ The AUR package is **`omapic-git`** (a VCS package that builds from source).
 - Multiple simultaneous cut lines (one at a time for now)
 - Re-draggable band edge handles after the initial drag
 - A custom app icon (currently reuses omacut's)
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for what's new.
+
+## Roadmap
+
+See at my second brain at [Roadmap](https://www.ssp.sh/brain/omapic#roadmap).
