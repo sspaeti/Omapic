@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=omapic
+GenericName=Image Cut-Out
+Comment=Cut bands out of images
+Exec=omapic %f
+Icon=omapic
+Terminal=false
+Categories=Graphics;
+MimeType=image/png;image/jpeg;image/webp;
+Keywords=image;cut;crop;band;
+StartupWMClass=omapic
