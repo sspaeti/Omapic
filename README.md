@@ -8,57 +8,18 @@ Built like [omacut](https://github.com/omacom-io/omacut): Qt Quick (QML) UI +
 a C++ backend compiled to a single binary. Cuts use Qt's `QImage` — no ffmpeg,
 no ImageMagick at runtime.
 
-## Video
-Short video above cut in action:
-![omapic video](images/omapic-vertical-cut.gif) 
+## Demo
 
-### Screenshots
+Short video of a cut in action:
 
-Cutting image by importing a long image - see before and after:
+![omapic video](images/omapic-vertical-cut.gif)
+
+Cutting a long image — before and after:
+
 |                     Image cut                      |
 | :--------------------------------------------------: |
 | ![omapic image](images/omapic-before.png) |
 | ![omapic image](images/omapic-after.png) |
-
-
-## Keys
-- **drag** — create a band (drag direction picks horizontal vs vertical)
-- **Enter** — apply the cut
-- **Ctrl+Z** — undo
-- **Ctrl+C** — copy result to clipboard
-- **Ctrl+S** — save to `~/Pictures/Printscreen/<YYYY-MM>/`
-- **Ctrl+Shift+S** — save as… (native file dialog)
-- **Ctrl+O** — open a file
-- **Esc** — clear the current band
-
-## Run
-    omapic image.png       # open a file
-    omapic --clipboard     # load the current clipboard image
-
-## Hyprland keybind
-    bindd = SUPER ALT, C, Cut-out image, exec, ~/git/images/omapic/scripts/omapic-capture-cut.sh
-
-## Build
-    ./bin/build            # -> build/omapic
-    ./bin/test             # run unit tests
-    ./bin/install          # build + install the Arch package
-
-Requires: `qt6-base`, `qt6-declarative`, `wl-clipboard`, `xdg-desktop-portal`
-(+ a FileChooser portal backend such as `xdg-desktop-portal-gtk` for the file
-dialogs — see [Requirements](#requirements)).
-
-## Makefile
-
-A root `Makefile` wraps the common workflows (run `make help` for the full list):
-
-    make install                 # build + install the system Arch package (makepkg -fsi)
-    make uninstall               # remove the installed package
-    make run ARGS=image.png      # build then run on the given image
-    make test                    # run backend unit tests
-    make release VERSION=v0.1.0  # tag+push, bump aur/PKGBUILD, publish to the AUR (all in one)
-    make aur-bump VERSION=v0.1.0 # (manual) point aur/PKGBUILD at a tag + refresh checksum
-    make aur-publish             # (manual) push aur/PKGBUILD + .SRCINFO to the AUR
-    make help                    # list all targets
 
 ## Install
 
@@ -125,8 +86,52 @@ Install into your user prefix (no root; `make install` is Arch-only):
 
 Make sure `~/.local/bin` is on your `PATH`.
 
-## Create release
-**Cut a release — one command** (tags use the form `v0.1.0`; no dot after `v`):
+## Usage
+
+Open an image from a file or the clipboard:
+
+    omapic image.png       # open a file
+    omapic --clipboard     # load the current clipboard image
+
+### Keys
+
+- **drag** — create a band (drag direction picks horizontal vs vertical)
+- **Enter** — apply the cut
+- **Ctrl+Z** — undo
+- **Ctrl+C** — copy result to clipboard
+- **Ctrl+S** — save to `~/Pictures/Printscreen/<YYYY-MM>/`
+- **Ctrl+Shift+S** — save as… (native file dialog)
+- **Ctrl+O** — open a file
+- **Esc** — clear the current band
+
+### Hyprland keybind
+
+To open the most recent screenshot straight into omapic, add this to your
+Hyprland binds (mine live in [bindings.conf](https://github.com/sspaeti/dotfiles/blob/master/hypr/.config/hypr/bindings.conf)):
+
+```sh
+bindd = SUPER ALT, C, Cut-out image, exec, ~/git/images/omapic/scripts/omapic-capture-cut.sh
+```
+
+## Development
+
+    ./bin/build            # compile -> build/omapic
+    ./bin/test             # run unit tests
+
+A root `Makefile` wraps the common workflows (`make help` for all):
+
+    make install                 # build + install the system Arch package (makepkg -fsi)
+    make uninstall               # remove the installed package
+    make run ARGS=image.png      # build then run on the given image
+    make test                    # run unit tests
+    make release VERSION=v0.1.0  # tag+push, bump aur/PKGBUILD, publish to the AUR (all in one)
+    make aur-bump VERSION=v0.1.0 # (manual) point aur/PKGBUILD at a tag + refresh checksum
+    make aur-publish             # (manual) push aur/PKGBUILD + .SRCINFO to the AUR
+    make help                    # list all targets
+
+### Cut a release
+
+One command (tags use the form `v0.1.0` — no dot after `v`):
 
     make release VERSION=v0.1.0
 
@@ -136,8 +141,9 @@ run creates the `omapic` AUR package; later runs update it. (`make aur-bump` /
 `make aur-publish` remain available to run those steps by hand.)
 
 ## Not yet
+
 - A custom app icon (currently reuses omacut's)
 
 ## Roadmap
 
-See at my second brain at [Roadmap](https://www.ssp.sh/brain/omapic#roadmap).
+See my second brain at [Roadmap](https://www.ssp.sh/brain/omapic#roadmap).
